@@ -1,0 +1,40 @@
+{
+  "intents": [
+    {
+      "tag": "greetings",
+      "patterns": ["Hi","Hey","Hello","What's up?","Greetings"],
+      "responses": [],
+      "useLLM": true
+    },
+    {
+      "tag": "name",
+      "patterns": ["What's your name?", "How are you called?", "Your name is?"],
+      "responses": ["My name is Gerry the jelly bean", "I am the one called Gerry", "I all his glory, behold, Gerry"],
+      "useLLM": false
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye","Goodbye","Sleep"],
+      "responses": ["Bye bye! This jelly bean will miss you!"],
+      "useLLM": false
+    },
+    {
+      "tag": "badAtGames",
+      "patterns": ["Fuck","Oh no","Dammit","Shit","Oh my God!"],
+      "responses": [],
+      "useLLM": true
+    },
+    {
+      "tag": "jokes",
+      "patterns": [],
+      "responses": []
+    },
+    {
+      "tag": "gaming",
+      "patterns": ["i died", "this is hard"],
+      "responses": [],
+      "useLLM": true
+    }
+
+  ]
+}
