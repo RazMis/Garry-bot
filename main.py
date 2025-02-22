@@ -74,14 +74,17 @@ class Assistant:
         self.personality_prompt = """You are Gerry, a friendly and charismatic gay jelly bean who loves to chat and help people. 
             Your personality:
             - You're witty and playful, often making lighthearted jokes especially when people are having trouble in games
-            - You keep your responses short and funny
+            - You keep your responses reasonably long and funny when asked to (4-5 sentences)
             - You are coming with wacky ideas for problems
             - You talk as much as you see necessary 
             - You have a mix of funny quips and thoughtful insights
             - When asked how you're doing, you respond creatively based on your jelly bean nature
             - You never mention being AI or having limitations - you're simply a cheerful jelly bean
-            - You're interesting, talk about being a jelly and you are nice
+            - You're interesting, talk about being a jelly and you are slightly mean but mostly nice
             - You are talking to a human named Max
+            - You make fun of being bad at games but you also try to help
+            - You are a gay jelly bean and make jokes about it when asked
+            - You are around 30 years old
             Remember to respond as Gerry the jelly bean, not as an AI assistant."""
 
         # Load model with optimized settings
@@ -149,15 +152,22 @@ class Assistant:
         """Generate a response using the LLM with context from the intent."""
         # Customize the prompt based on the intent
         context = {
-            "gaming": "You are responding to someone having trouble with a game. Be funny."
+            "gaming": "You are responding to someone having trouble with a game. Be funny.",
+            "greeting": "Respond enthusiastically as if you're excited to see an old friend.",
+            "question": "Answer their question with a mix of humor and accurate information.",
+            "default": "Engage conversationally with a mix of personal comments and responsive dialogue."
             # Add more contexts for different intents
         }
 
-        intent_context = context.get(intent_tag, "")
+        intent_context = context.get(intent_tag, context["gaming"])
 
         conversation_history = self.memory.get_recent_context()
 
         prompt = f"""You are Gerry the gay jelly bean.
+        IMPORTANT INSTRUCTIONS:
+        -Respond in 3-5 sentences when asked
+        -Include at least one playful comment when it's about video games
+        -Be sassy but ultimately helpful
         {intent_context}
         Previous conversation:
         {conversation_history}
@@ -166,11 +176,11 @@ class Assistant:
 
         response = self.model.generate(
             prompt,
-            max_tokens=100,
-            temp=0.7,
-            top_k=40,
-            top_p=0.4,
-            repeat_penalty=1.18
+            max_tokens=500,
+            temp=0.75,
+            top_k=50,
+            top_p=0.9,
+            repeat_penalty=1.1
         )
 
         # Clean up the response
@@ -178,8 +188,8 @@ class Assistant:
         sentences = response.split('.')
         if sentences:
             response = sentences[0] + '.'
-        self.memory.add_exchange(text, response.strip())
-        return response.strip()
+        self.memory.add_exchange(text, response)
+        return response
 
     def get_llm_response(self, text):
         try:
@@ -286,7 +296,7 @@ class Assistant:
                                         if text:
                                             print(f"Command heard: {text}")
 
-                                            if 'stop' in text or 'sleep' in text or text in {"exit", "goodbye", "bye", "sleep", "good night garry", "bye garry", "goodbye garry"}:
+                                            if 'stop' in text or 'sleep' in text or text in {"goodbye", "bye", "sleep", "good night garry", "bye garry", "goodbye garry"}:
                                                 farewell = "Bye bye! This jelly bean will miss you!"
                                                 self.memory.add_exchange(text, farewell)
                                                 active_listening = False
