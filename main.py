@@ -112,7 +112,7 @@ class Assistant:
         self.setup_response_cache()
 
         # DeepSeek API configuration
-        self.deepseek_api_key = "sk-6576877a59284e89a461254b3af4851a"  # Replace with your actual API key
+        self.deepseek_api_key = "Your api key"  # Replace with your actual API key
         self.deepseek_api_endpoint = "https://api.deepseek.com/v1/chat/completions"
         self.deepseek_model_name = "deepseek-chat"  # Replace with the correct model name
 
